@@ -19,6 +19,9 @@ void wordleHelper(std::string partial,
     std::set<std::string>& result,
     unsigned int curr);
 
+
+bool contains(std::string partial, const std::string& floating, unsigned int index);
+
 // Definition of primary wordle function
 std::set<std::string> wordle(
     const std::string& in,
@@ -32,6 +35,11 @@ std::set<std::string> wordle(
     return result;
 }
 
+
+
+
+
+// Define any helper functions here
 void wordleHelper(std::string partial,
     const std::string& floating,
     const std::set<std::string>& dict,
@@ -42,24 +50,41 @@ void wordleHelper(std::string partial,
     {
         if (dict.find(partial) != dict.end())
         {
-            std::cout << partial << std::endl;
+          if (contains(partial, floating, 0))
+          {
             result.insert(partial);
+          }
         }
         return;
     }
 
     if (partial[curr] != '-')
     {
-        wordleHelper(partial, floating, dict, result, curr + 1);
+      wordleHelper(partial, floating, dict, result, curr + 1);
     }
 
     else
     {
-        for (int i = 97; i <= 122; i++) //for all letters
-        {
-            partial[curr] = char(i);
-            wordleHelper(partial, floating, dict, result, curr + 1);
-        }
+      for (int i = 97; i <= 122; i++) //for all letters
+      {
+        partial[curr] = char(i);
+        wordleHelper(partial, floating, dict, result, curr + 1);
+      }
     }
 }
-// Define any helper functions here
+
+
+bool contains(std::string partial, const std::string& dependents, unsigned int index)
+{
+  if (index == dependents.size())
+  {
+    return true;
+  }
+  if (partial.find(dependents[index]) == std::string::npos)
+  {
+    return false;
+  }
+  return contains(partial, dependents, index + 1); 
+}
+
+
