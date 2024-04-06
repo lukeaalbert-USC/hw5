@@ -48,9 +48,9 @@ void wordleHelper(std::string partial,
 {
     if (curr == partial.size())
     {
-        if (dict.find(partial) != dict.end())
+        if (contains(partial, floating, 0))
         {
-          if (contains(partial, floating, 0))
+          if (dict.find(partial) != dict.end())
           {
             result.insert(partial);
           }
@@ -76,7 +76,7 @@ void wordleHelper(std::string partial,
 
 bool contains(std::string partial, const std::string& dependents, unsigned int index)
 {
-  if (index == dependents.size())
+  if (index == dependents.size()) 
   {
     return true;
   }
