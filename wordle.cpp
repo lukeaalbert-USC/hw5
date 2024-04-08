@@ -84,7 +84,11 @@ bool contains(std::string partial, const std::string& dependents, unsigned int i
   {
     return false;
   }
-  return contains(partial, dependents, index + 1); 
+  else
+  {
+    partial[partial.find(dependents[index])] = '_';
+    return contains(partial, dependents, index + 1); 
+  }
 }
 
 
