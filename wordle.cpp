@@ -5,6 +5,7 @@
 #include <algorithm> 
 #include <map>
 #include <set>
+#include <regex>
 #endif
 
 #include "wordle.h"
@@ -14,13 +15,14 @@ using namespace std;
 
 // Add prototypes of helper functions here
 void wordleHelper(std::string partial,
-    const std::string& floating,
+    std::string floating,
     const std::set<std::string>& dict,
     std::set<std::string>& result,
     unsigned int curr);
 
+int countUnderscores(const std::string& str);
 
-bool contains(std::string partial, const std::string& floating, unsigned int index);
+// bool contains(std::string partial, const std::string& floating, unsigned int index);
 
 // Definition of primary wordle function
 std::set<std::string> wordle(
@@ -31,7 +33,10 @@ std::set<std::string> wordle(
     // Add your code here
     std::set<std::string> result;
     std::string partial = in;
-    wordleHelper(partial, floating, dict, result, 0);
+
+    std::string floatingCopy = floating;
+
+    wordleHelper(partial, floatingCopy, dict, result, 0);
     return result;
 }
 
@@ -41,21 +46,17 @@ std::set<std::string> wordle(
 
 // Define any helper functions here
 void wordleHelper(std::string partial,
-    const std::string& floating,
+    std::string floating,
     const std::set<std::string>& dict,
     std::set<std::string>& result,
     unsigned int curr)
 {
     if (curr == partial.size())
-    {
-        if (contains(partial, floating, 0))
-        {
-          if (dict.find(partial) != dict.end())
-          {
+    { 
+      if (dict.find(partial) != dict.end() && floating.length() == 0) {
             result.insert(partial);
-          }
-        }
-        return;
+      }
+      return;
     }
 
     if (partial[curr] != '-')
@@ -65,30 +66,51 @@ void wordleHelper(std::string partial,
 
     else
     {
-      for (int i = 97; i <= 122; i++) //for all letters
+      // Add a floating letter
+      for (int j = 0; j < floating.length(); j++) {
+        partial[curr] = floating[j];
+        std::string substr = floating.substr(0,j) + floating.substr(j+1); // get the substring without letter j
+        // put letter j in the partial
+        wordleHelper(partial, substr, dict, result, curr + 1);
+      }
+
+      //std::cout << "HERE" << std::endl;
+      //std::cout << partial << std::endl;
+      //std::cout << countUnderscores(partial) << std::endl;
+      if (countUnderscores(partial) >= floating.length()) // number of blanks > the number of floating letters
       {
-        partial[curr] = char(i);
-        wordleHelper(partial, floating, dict, result, curr + 1);
+        for (int i = (int) 'a'; i <= (int) 'z'; i++) //for all letters
+        {
+          partial[curr] = char(i);
+          wordleHelper(partial, floating, dict, result, curr + 1);
+        }
       }
     }
 }
 
 
-bool contains(std::string partial, const std::string& dependents, unsigned int index)
-{
-  if (index == dependents.size()) 
-  {
-    return true;
+// bool contains(std::string partial, const std::string& dependents, unsigned int index)
+// {
+//   if (index == dependents.size()) 
+//   {
+//     return true;
+//   }
+//   if (partial.find(dependents[index]) == std::string::npos)
+//   {
+//     return false;
+//   }
+//   else
+//   {
+//     partial[partial.find(dependents[index])] = '_';
+//     return contains(partial, dependents, index + 1); 
+//   }
+// }
+
+
+int countUnderscores(const std::string& str) {
+  int count = 0;
+  for (int k = 0; k < str.length(); k++) {
+    count += (int) (str[k] == '-');
   }
-  if (partial.find(dependents[index]) == std::string::npos)
-  {
-    return false;
-  }
-  else
-  {
-    partial[partial.find(dependents[index])] = '_';
-    return contains(partial, dependents, index + 1); 
-  }
+  return count;
 }
-
-
