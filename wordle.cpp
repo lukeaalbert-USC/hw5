@@ -41,9 +41,6 @@ std::set<std::string> wordle(
 }
 
 
-
-
-
 // Define any helper functions here
 void wordleHelper(std::string partial,
     std::string floating,
@@ -73,10 +70,6 @@ void wordleHelper(std::string partial,
         // put letter j in the partial
         wordleHelper(partial, substr, dict, result, curr + 1);
       }
-
-      //std::cout << "HERE" << std::endl;
-      //std::cout << partial << std::endl;
-      //std::cout << countUnderscores(partial) << std::endl;
       if (countUnderscores(partial) >= floating.length()) // number of blanks > the number of floating letters
       {
         for (int i = (int) 'a'; i <= (int) 'z'; i++) //for all letters
@@ -87,24 +80,6 @@ void wordleHelper(std::string partial,
       }
     }
 }
-
-
-// bool contains(std::string partial, const std::string& dependents, unsigned int index)
-// {
-//   if (index == dependents.size()) 
-//   {
-//     return true;
-//   }
-//   if (partial.find(dependents[index]) == std::string::npos)
-//   {
-//     return false;
-//   }
-//   else
-//   {
-//     partial[partial.find(dependents[index])] = '_';
-//     return contains(partial, dependents, index + 1); 
-//   }
-// }
 
 
 int countUnderscores(const std::string& str) {
