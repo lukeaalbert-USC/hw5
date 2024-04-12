@@ -73,7 +73,6 @@ bool schedule(
 bool scheduleHelper(const AvailabilityMatrix& avail, const size_t dailyNeed, const size_t maxShifts, DailySchedule& sched, map<Worker_T, size_t> workerToDaysWorked, size_t row, size_t col, size_t workersScheduled, size_t workerLoopHelp) {
     if (row == avail.size() && col == 0) //if we're on the last day and the last worker
     {
-        //printSchedule(avail);
         return true;
     }
     for (int worker = workerLoopHelp; worker < avail[0].size(); worker++) //for all workers
