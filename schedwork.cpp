@@ -65,24 +65,19 @@ bool schedule(
         for (size_t j = 0; j < dailyNeed; j++)
         {
             sched[i].push_back(INT_MAX); //all vals will be INT_MAX
-            std::cout << INT_MAX << ", ";
         }
-        std::cout << std::endl;
     }
     return scheduleHelper(avail, dailyNeed, maxShifts, sched, workerToDaysWorked, 0, 0, 0, 0);
 }
 
 bool scheduleHelper(const AvailabilityMatrix& avail, const size_t dailyNeed, const size_t maxShifts, DailySchedule& sched, map<Worker_T, size_t> workerToDaysWorked, size_t row, size_t col, size_t workersScheduled, size_t workerLoopHelp) {
-    if (row + 1 == avail.size() && col + 1 == dailyNeed) //if we're on the last day and the last worker
+    if (row == avail.size() && col == 0) //if we're on the last day and the last worker
     {
-        std::cout << "in return";
         //printSchedule(avail);
         return true;
     }
     for (int worker = workerLoopHelp; worker < avail[0].size(); worker++) //for all workers
     {
-        std::cout << "dailyNeed: " << dailyNeed << " avail.size(): " << avail.size() << std::endl;
-        std::cout << "worker: " << worker << " row: " << row << " col: " << col << std::endl;
         sched[row][col] = worker;
         workerToDaysWorked[worker]++;
         workersScheduled++;
